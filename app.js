@@ -31,6 +31,25 @@ spotifyApi
 app.get("/home", (req, res) => {
   res.render("home");
 });
+
+app.get("/artist-search", async (req, res) => {
+  spotifyApi
+    .searchArtists(req.query.artist)
+    .then((data) => {
+      //console.log("The received data from the API: ", data.body);
+      // ----> 'HERE WHAT WE WANT TO DO AFTER RECEIVING THE DATA FROM THE API'
+      const ApiQuery = {
+        artists: data.body.artists.items,
+      };
+      res.render("artist-search-results", ApiQuery);
+      console.log(ApiQuery);
+      console.log(ApiQuery.artists[0].images[0]);
+    })
+    .catch((err) =>
+      console.log("The error while searching artists occurred: ", err)
+    );
+});
+
 app.listen(3000, () =>
   console.log("My Spotify project running on port 3000 🎧 🥁 🎸 🔊")
 );
